@@ -1,0 +1,106 @@
+<div class="container">
+    <div *ngIf="!loading; else loadingBlock">
+        <a [routerLink]="['/company/home']"><button class="btn btn-dark">Cancel</button></a>
+        <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+            <h2>Create new coupon</h2>
+
+            <!-- for errors debugging -->
+            <!-- <pre>{{form.get('category').errors | json}}</pre> -->
+            <div class="form-control">
+                <label>Category</label>
+                <select formControlName="category">
+                    <option value="" selected="selected">--Please choose category--</option>
+                    <option *ngFor="let cat of categoriesList" value="{{cat}}">{{cat | lowercase}}</option>
+                </select>
+                <div class="validation" *ngIf="form.get('category').invalid && form.get('category').touched">
+                    <small>Category not chosen</small>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label>Title</label>
+                <input type="text" placeholder="Title" formControlName="title">
+                <div class="validation" *ngIf="form.get('title').invalid && form.get('title').touched">
+                    <small *ngIf="form.get('title').errors.required">Title is required</small>
+                    <small *ngIf="form.get('title').errors.maxlength">
+                        Title should be no more than {{form.get('title').errors.maxlength.requiredLength}} 
+                        characters long, now it is {{form.get('title').errors.maxlength.actualLength}} characters long
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label>Description</label>
+                <input type="text" placeholder="Description" formControlName="description">
+                <div class="validation" *ngIf="form.get('description').invalid && form.get('description').touched">
+                    <small *ngIf="form.get('description').errors.required">Description is required</small>
+                    <small *ngIf="form.get('description').errors.maxlength">
+                        Description should be no more than {{form.get('description').errors.maxlength.requiredLength}} 
+                        characters long, now it is {{form.get('title').errors.maxlength.actualLength}} characters long
+                    </small>
+                </div>
+            </div>
+
+            <!-- <pre>{{form.get('startDate').errors | json}}</pre> -->
+            <div class="form-control">
+                <label>Start date</label>
+                <input [type]="setAttributeToDate1 ? 'date' : 'text'" 
+                        (focus)="setAttributeToDate1=true" 
+                        (blur)="setAttributeToDate1=false" 
+                        (input)="onInputDate1($event)"
+                        [placeholder]='dateToday | date: "yyyy-MM-dd"'
+                        formControlName="startDate">
+                <div class="validation" *ngIf="form.get('startDate').invalid && form.get('startDate').touched">
+                    <small *ngIf="form.get('startDate').errors.required">Start date is required </small>
+                    <small *ngIf="form.get('startDate').errors.datePassed">This date is passed</small>
+                </div>
+            </div>
+
+            <!-- <pre>{{form.get('endDate').errors | json}}</pre> -->
+            <div class="form-control">
+                <label>Expiration date</label>
+                <input [type]="setAttributeToDate2 ? 'date' : 'text'" 
+                        (focus)="setAttributeToDate2=true" 
+                        (blur)="setAttributeToDate2=false" 
+                        (input)="onInputDate2($event)"
+                        [placeholder]='dateToday | date: "yyyy-MM-dd"'
+                        formControlName="endDate">
+                <div class="validation" *ngIf="form.get('endDate').invalid && form.get('endDate').touched">
+                    <small *ngIf="form.get('endDate').errors.required">Expiration date is required </small>
+                    <small *ngIf="form.get('endDate').errors.datePassed">This date is passed</small>
+                    <small *ngIf="form.get('endDate').errors.endDateBeforeStartDate">Expiration date before start date not allowed</small>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label>Amount</label>
+                <input type="number" min="1" max="999" formControlName="amount">
+                <div class="validation" *ngIf="form.get('amount').invalid && form.get('amount').touched">
+                    <small>Amount is required</small>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label>Price</label>
+                <input type="number" min="0" max="99999" formControlName="price">
+                <div class="validation" *ngIf="form.get('price').invalid && form.get('price').touched">
+                    <small>Price is required</small>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label>Image url</label>
+                <input type="text" placeholder="image url (optional)" formControlName="image">
+            </div>
+
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Add new coupon</button>
+            <button class="btn btn-dark" (click)="formReset()" type="button">Reset all fields</button>
+
+        </form>
+
+    </div>
+
+    <ng-template #loadingBlock>
+        <p class="text-center">Loading form...</p>
+    </ng-template>
+</div>

@@ -1,0 +1,21 @@
+<nav class="navbar bg-primary">
+    <h1>Welcome {{name}}</h1>
+    <ul>
+        <li routerLinkActive="active">
+            <a [routerLink]="['/company', 'home']">Home</a>         
+        </li>
+        <li routerLinkActive="active">
+            <a [routerLink]="['/company', 'coupons']">Coupons</a>         
+        </li>
+        <li routerLinkActive="active">
+            <a [routerLink]="['/company', 'new']">Create new coupon</a>         
+        </li>
+        <li>
+            <a href='#' (click)="logout($event)">Logout</a>
+        </li>
+    </ul>
+</nav>
+<div class="container">
+    <app-alert></app-alert>
+    <router-outlet></router-outlet>
+</div>

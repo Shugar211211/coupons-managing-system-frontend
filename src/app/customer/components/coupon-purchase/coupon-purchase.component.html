@@ -1,0 +1,45 @@
+<a [routerLink]="['/customer/home']"><button class="btn btn-dark">Back</button></a>
+<div *ngIf="!loading; else loadingBlock">
+    <div *ngIf="coupons.length; else noElements">
+
+        <h2>Awailable coupons:</h2>
+
+        <div class="filter">
+            Filter by maximum price:
+            <input type="number" min="0" max="99999" [(ngModel)]="maxPrice">
+            &nbsp;
+            Filter by category:
+            <select [(ngModel)]="selectedCategory">
+                <option [ngValue]=null selected="selected">ALL CATEGORIES</option>
+                <option *ngFor="let cat of categoriesList" [ngValue]="cat">{{cat | lowercase}}</option>
+            </select>
+        </div>
+
+        <div class="card" *ngFor="let coupon of coupons | filterByCategory:selectedCategory | filterByMaxprice:maxPrice">
+                <!-- <span> -->
+                    <img *ngIf="coupon.image" [src]="coupon.image" alt="coupon image">
+                    <div class="data">
+                        <span class="title"><h3>{{coupon.title}}</h3></span>
+                        <h3>Price: {{coupon.price}}</h3>
+                        <h5>Category: {{coupon.category | lowercase}}</h5>
+                        <h5>Launch date: {{coupon.startDate | date}}</h5>
+                        <h5>Expiration date: {{coupon.startDate | date}}</h5>
+                        <h5>{{coupon.description}} </h5>
+                    </div>
+                    <h3>{{coupon.Description}} </h3>
+                    <!-- {{coupon.amount}}units, {{coupon.price}}nis -->
+                <!-- </span> -->
+                <!-- <a [routerLink]="['/company/coupons/data', coupon.id]"><button class="btn btn-dark">Purchase</button></a> -->
+                <button (click)=purchase(coupon) class="btn btn-dark" [disabled]="purchasing">Purchase</button>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #loadingBlock>
+    <p class="text-center">Loading coupons...</p>
+</ng-template>
+
+<ng-template #noElements>
+    <h3>No coupons awailable for purchase</h3>
+</ng-template>

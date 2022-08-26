@@ -1,0 +1,133 @@
+<a [routerLink]="['/company/coupons']"><button class="btn btn-dark">Back</button></a>
+<div class="card">
+    <div *ngIf="!loading; else loadingBlock">
+        <!-- display details until update button is pressed -->
+        <div *ngIf="!update; else updateCoupon">
+            <div class="card header">
+                <img [src]=coupon.image>
+                <h2>{{coupon.title}}</h2>
+            </div>
+            <!-- <span><h3>{{coupon.title}}</h3></span> -->
+            <span><h3>{{coupon.description}}</h3></span>
+            <span><h4>Category: {{coupon.category | lowercase}}</h4></span>
+            <span><h4>Quantity: {{coupon.amount}} items</h4></span>
+            <span><h4>Price: {{coupon.price }} NIS</h4></span>
+            <span><h4>Issue date: {{coupon.startDate | date}}</h4></span>
+            <span><h4>Expiration date: {{coupon.endDate | date}}</h4></span>
+            <button class="btn btn-dark" (click)="setUpdate()">Update</button>
+            <button class="btn btn-primary" (click)="delete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- update block to be displayed instead of details block -->
+<ng-template #updateCoupon>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <img [src]=image>
+
+        <!-- for errors debugging -->
+        <!-- <pre>{{form.get('email').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Image url:</label>
+            <input type="text" formControlName="image" (blur)="preloadImage($event)" [value]="image">
+        </div>
+
+        <!-- for errors debugging -->
+        <!-- <pre>{{form.get('email').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Title</label>
+            <input type="text" formControlName="title">
+            <div class="validation" *ngIf="form.get('title').invalid && form.get('title').touched">
+                <small *ngIf="form.get('title').errors.required">Coupon title is required</small>
+                <small *ngIf="form.get('title').errors.maxlength">
+                    Title should be no more than {{form.get('title').errors.maxlength.requiredLength}} 
+                    characters long, now it is {{form.get('title').errors.maxlength.actualLength}} characters long
+                </small>
+            </div>
+        </div>
+
+        <!-- errors debugging -->
+        <!-- <pre>{{form.get('password').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Description</label>
+            <input type="text" formControlName="description">
+            <div class="validation" *ngIf="form.get('description').invalid && form.get('description').touched">
+                <small *ngIf="form.get('description').errors.required">Coupon description is required</small>
+                <small *ngIf="form.get('description').errors.maxlength">
+                    Description should be no more than {{form.get('description').errors.maxlength.requiredLength}} 
+                    characters long, now it is {{form.get('title').errors.maxlength.actualLength}} characters long
+                </small>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label>Category</label>
+            <select formControlName="category">
+                <!-- <option [ngValue]="currCategory" selected="selected">{{currCategory}}</option> -->
+                <option *ngFor="let cat of categoriesList" [ngValue]="cat">{{cat | lowercase}}</option>
+            </select>
+            <div class="validation" *ngIf="form.get('category').invalid && form.get('category').touched">
+                <small>Category not chosen</small>
+            </div>
+        </div>
+        <!-- <p>{{ coupon.category | json }}</p>
+        <p>currCategory: {{ currCategory | json }}</p>
+        <p>{{ form.value | json }}</p> -->
+
+        <!-- <p>{{ form.value | json }}</p> -->
+        <div class="form-control">
+            <label>Start date</label>
+            <input [type]="setAttributeToDate1 ? 'date' : 'text'" 
+                    (focus)="setAttributeToDate1=true" 
+                    (blur)="setAttributeToDate1=false" 
+                    (input)="onInputDate1($event)"
+                    formControlName="startDate">
+            <div class="validation" *ngIf="form.get('startDate').invalid && form.get('startDate').touched">
+                <small *ngIf="form.get('startDate').errors.required">Start date is required</small>
+            </div>
+        </div>
+
+        <!-- <pre>{{form.get('endDate').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Expiration date</label>
+            <input [type]="setAttributeToDate2 ? 'date' : 'text'" 
+                    (focus)="setAttributeToDate2=true" 
+                    (blur)="setAttributeToDate2=false" 
+                    (input)="onInputDate2($event)"
+                    formControlName="endDate">
+            <div class="validation" *ngIf="form.get('endDate').invalid && form.get('endDate').touched">
+                <small *ngIf="form.get('endDate').errors.required">Expiration date is required</small>
+                <small *ngIf="form.get('endDate').errors.datePassed">This date is passed</small>
+                <small *ngIf="form.get('endDate').errors.endDateBeforeStartDate">Expiration date before start date not allowed</small>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label>Amount</label>
+            <input type="number" min="1" max="999" formControlName="amount">
+            <div class="validation" *ngIf="form.get('amount').invalid && form.get('amount').touched">
+                <small>Amount is required</small>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label>Price</label>
+            <input type="number" min="0" max="99999" formControlName="price">
+            <div class="validation" *ngIf="form.get('price').invalid && form.get('price').touched">
+                <small>Price is required</small>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || form.submitting">Save</button>
+        <button class="btn btn-dark" type="button" (click)="update=false">Cancel</button>
+
+    </form>
+
+</ng-template>
+
+<!-- loading indicator to be displayed while data is loading -->
+<ng-template #loadingBlock>
+    <p class="text-center">Loading...</p>
+</ng-template>

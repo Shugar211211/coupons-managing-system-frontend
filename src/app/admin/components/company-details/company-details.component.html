@@ -1,0 +1,56 @@
+<div class="card">
+    <a [routerLink]="['/admin/companies']"><button class="btn btn-dark">Back</button></a>
+    <div *ngIf="!loading; else loadingBlock">
+        <div class="card header">
+            <h2>{{company.name}}</h2>
+        </div>
+        <!-- display details until update button is pressed -->
+        <div *ngIf="!update; else updateCompany">
+            <span><h3>Email: <br/>{{company.email}}</h3></span>
+            <span><h3>Password: <br/>{{company.password}}</h3></span>
+            <button class="btn btn-dark" (click)="setUpdate()">Update</button>
+            <button class="btn btn-primary" (click)="delete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- update block to be displayed instead of details block -->
+<ng-template #updateCompany>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <!-- for errors debugging -->
+        <!-- <pre>{{form.get('email').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Update email</label>
+            <input type="email" formControlName="email">
+            <div class="validation" *ngIf="form.get('email').invalid && form.get('email').touched">
+                <small *ngIf="form.get('email').errors.required">Email is required</small>
+                <small *ngIf="form.get('email').errors.email">Email must be valid</small>
+            </div>
+        </div>
+
+        <!-- errors debugging -->
+        <!-- <pre>{{form.get('password').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Update password</label>
+            <input type="text" formControlName="password">
+            <div class="validation" *ngIf="form.get('password').invalid && form.get('password').touched">
+                <small *ngIf="form.get('password').errors.required">Password is required</small>
+                <small *ngIf="form.get('password').errors.minlength">
+                    Password should be at least {{form.get('password').errors.minlength.requiredLength}} characters long, 
+                    now it is {{form.get('password').errors.minlength.actualLength}} characters long
+                </small>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || form.submitting">Save</button>
+        <button class="btn btn-dark" type="button" (click)="update=false">Cancel</button>
+
+    </form>
+
+</ng-template>
+
+<!-- loading indicator to be displayed while data is loading -->
+<ng-template #loadingBlock>
+    <p class="text-center">Loading...</p>
+</ng-template>

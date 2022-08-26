@@ -1,0 +1,22 @@
+<a [routerLink]="['/admin/companies/new']"><button class="btn btn-dark">Add new company</button></a>
+<div *ngIf="!loading; else loadingBlock">
+    <div *ngIf="companies.length; else noElements">
+
+        <input type="text" placeholder="Search company by name..." [(ngModel)]="searchStr">
+
+        <div class="card" *ngFor="let company of companies | findCompanyByName: searchStr">
+                <span [class.completed]="company.completed">
+                    <bold>{{company.name}}</bold>
+                </span>
+                <a [routerLink]="['/admin/companies/data', company.id]"><button class="btn btn-dark">Details</button></a>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingBlock>
+    <p class="text-center">Loading...</p>
+</ng-template>
+
+<ng-template #noElements>
+    <p>No companies registered</p>
+</ng-template>

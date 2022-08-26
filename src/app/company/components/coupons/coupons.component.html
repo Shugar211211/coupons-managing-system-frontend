@@ -1,0 +1,36 @@
+<a [routerLink]="['/company/new']"><button class="btn btn-dark">Add new coupon</button></a>
+<div *ngIf="!loading; else loadingBlock">
+    <div *ngIf="coupons.length; else noElements">
+
+        <div class="filter">
+            Filter by maximum price:
+            <input type="number" min="0" max="99999" [(ngModel)]="maxPrice">
+            &nbsp;
+            Filter by category:
+            <select [(ngModel)]="selectedCategory">
+                <option [ngValue]=null selected="selected">ALL CATEGORIES</option>
+                <option *ngFor="let cat of categoriesList" [ngValue]="cat">{{cat | lowercase}}</option>
+            </select>
+        </div>
+
+        <div class="card" *ngFor="let coupon of coupons | filterByCategory:selectedCategory | filterByMaxprice:maxPrice">
+                <!-- <span> -->
+                    <img *ngIf="coupon.image" [src]="coupon.image" alt="coupon image">
+                    <div class="title">
+                        <h4>{{coupon.title}} </h4>
+                    </div>
+                    <!-- {{coupon.amount}}units, {{coupon.price}}nis -->
+                <!-- </span> -->
+                <a [routerLink]="['/company/coupons/data', coupon.id]"><button class="btn btn-dark">Details</button></a>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #loadingBlock>
+    <p class="text-center">Loading coupons...</p>
+</ng-template>
+
+<ng-template #noElements>
+    <p>No coupons registered</p>
+</ng-template>

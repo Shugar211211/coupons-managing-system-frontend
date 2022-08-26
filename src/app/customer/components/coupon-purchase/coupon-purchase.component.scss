@@ -1,0 +1,49 @@
+img {
+    max-height: 120px;
+    max-width: 120px;
+    // width: 120px;
+    margin-right: 20px;
+    // margin-top: 10px;
+    position: relative;
+}
+
+.title {
+    color: blue;
+}
+
+.card button {
+    float: right;
+    // vertical-align: middle;
+}
+
+.card > *{
+    display: inline-block;
+}
+
+span {
+    font-size: 1.2rem;
+    // display: inline;
+    // padding: 10px;
+}
+
+input {
+    margin-top: 10px;
+}
+
+input[type=number]{
+    width: 70px;
+} 
+
+select{
+    width: 243px;
+} 
+
+.filter > *{
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.data {
+    word-wrap: break-word;
+    width: 450px;
+ }

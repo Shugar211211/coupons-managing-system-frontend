@@ -1,0 +1,72 @@
+<div class="card">
+    <a [routerLink]="['/admin/customers']"><button class="btn btn-dark">Back</button></a>
+    <div *ngIf="!loading; else loadingBlock">
+        <!-- display details until update button is pressed -->
+        <div *ngIf="!update; else updateCustomer">
+            <div class="card header">
+                <h2>{{customer.firstName}} {{customer.lastName}}</h2>
+            </div>
+            <span><h3>Email: <br/>{{customer.email}}</h3></span>
+            <span><h3>Password: <br/>{{customer.password}}</h3></span>
+            <button class="btn btn-dark" (click)="setUpdate()">Update</button>
+            <button class="btn btn-primary" (click)="delete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- update block to be displayed instead of details block -->
+<ng-template #updateCustomer>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-control">
+            <label>Update first name</label>
+            <input type="text" formControlName="firstName">
+            <div class="validation" *ngIf="form.get('firstName').invalid && form.get('firstName').touched">
+                <small *ngIf="form.get('firstName').errors.required">First name is required</small>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label>Update last name</label>
+            <input type="text" formControlName="lastName">
+            <div class="validation" *ngIf="form.get('lastName').invalid && form.get('lastName').touched">
+                <small *ngIf="form.get('lastName').errors.required">Last name is required</small>
+            </div>
+        </div>
+
+        <!-- for errors debugging -->
+        <!-- <pre>{{form.get('email').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Update email</label>
+            <input type="email" formControlName="email">
+            <div class="validation" *ngIf="form.get('email').invalid && form.get('email').touched">
+                <small *ngIf="form.get('email').errors.required">Email is required</small>
+                <small *ngIf="form.get('email').errors.email">Email must be valid</small>
+            </div>
+        </div>
+
+        <!-- errors debugging -->
+        <!-- <pre>{{form.get('password').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Update password</label>
+            <input type="text" formControlName="password">
+            <div class="validation" *ngIf="form.get('password').invalid && form.get('password').touched">
+                <small *ngIf="form.get('password').errors.required">Password is required</small>
+                <small *ngIf="form.get('password').errors.minlength">
+                    Password should be at least {{form.get('password').errors.minlength.requiredLength}} characters long, 
+                    now it is {{form.get('password').errors.minlength.actualLength}} characters long
+                </small>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || form.submitting">Save</button>
+        <button class="btn btn-dark" type="button" (click)="update=false">Cancel</button>
+
+    </form>
+
+</ng-template>
+
+<!-- loading indicator to be displayed while data is loading -->
+<ng-template #loadingBlock>
+    <p class="text-center">Loading...</p>
+</ng-template>

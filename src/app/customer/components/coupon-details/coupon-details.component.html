@@ -1,0 +1,22 @@
+<a [routerLink]="['/customer/coupons']"><button class="btn btn-dark">Back</button></a>
+<button class="btn btn-dark" (click)="deleteCouponPurchase()">Delete this purchase</button>
+<div class="card">
+    <div *ngIf="!loading; else loadingBlock">
+        <div class="card header">
+            <img [src]=coupon.image>
+            <h2>{{coupon.title}}</h2>
+        </div>
+        <!-- <span><h3>{{coupon.title}}</h3></span> -->
+        <span><h3>{{coupon.description}}</h3></span>
+        <span><h4>Category: {{coupon.category | lowercase}}</h4></span>
+        <span><h4>Quantity: {{coupon.amount}} items</h4></span>
+        <span><h4>Price: {{coupon.price}} NIS</h4></span>
+        <span><h4>Issue date: {{coupon.startDate | date}}</h4></span>
+        <span><h4>Expiration date: {{coupon.endDate | date}}</h4></span>
+    </div>
+</div>
+
+<!-- loading indicator to be displayed while data is loading -->
+<ng-template #loadingBlock>
+    <p class="text-center">Loading...</p>
+</ng-template>

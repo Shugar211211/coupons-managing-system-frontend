@@ -1,0 +1,23 @@
+<a [routerLink]="['/admin/customers/new']"><button class="btn btn-dark">Add new customer</button></a>
+<div *ngIf="!loading; else loadingBlock">
+    <div *ngIf="customers.length; else noElements">
+
+        <input type="text" placeholder="Search customer by first name..." [(ngModel)]="searchStr">
+
+        <div class="card" *ngFor="let customer of customers | findCustomerByName: searchStr">
+                <span [class.completed]="customer.completed">
+                    <bold>{{customer.firstName}} {{customer.lastName}}</bold>
+                </span>
+                <a [routerLink]="['/admin/customers/data', customer.id]"><button class="btn btn-dark">Details</button></a>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingBlock>
+    <p class="text-center">Loading...</p>
+</ng-template>
+
+<ng-template #noElements>
+    <p>No customers registered</p>
+</ng-template>
+

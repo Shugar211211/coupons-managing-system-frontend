@@ -1,0 +1,43 @@
+<div class="container">
+    <a [routerLink]="['/admin/companies']"><button class="btn btn-dark">Back</button></a>
+    <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+        <h2>Register new company</h2>
+
+        <div class="form-control">
+            <label>Company name</label>
+            <input type="text" placeholder="Company name" formControlName="name">
+            <div class="validation" *ngIf="form.get('name').invalid && form.get('name').touched">
+                <small>Name is required</small>
+            </div>
+        </div>
+
+        <!-- for errors debugging -->
+        <!-- <pre>{{form.get('email').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Company email</label>
+            <input type="email" placeholder="Company email" formControlName="email">
+            <div class="validation" *ngIf="form.get('email').invalid && form.get('email').touched">
+                <small *ngIf="form.get('email').errors.required">Email is required</small>
+                <small *ngIf="form.get('email').errors.email">Email must be valid</small>
+            </div>
+        </div>
+
+        <!-- errors debugging -->
+        <!-- <pre>{{form.get('password').errors | json}}</pre> -->
+        <div class="form-control">
+            <label>Company password</label>
+            <input type="password" placeholder="Company password" formControlName="password">
+            <div class="validation" *ngIf="form.get('password').invalid && form.get('password').touched">
+                <small *ngIf="form.get('password').errors.required">Password is required</small>
+                <small *ngIf="form.get('password').errors.minlength">
+                    Password should be at least {{form.get('password').errors.minlength.requiredLength}} characters long, 
+                    now it is {{form.get('password').errors.minlength.actualLength}} characters long
+                </small>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Add new company</button>
+        <button class="btn btn-dark" type="button" (click)="formReset()">Clear all fields</button>
+
+    </form>
+</div>

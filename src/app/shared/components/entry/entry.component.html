@@ -1,0 +1,14 @@
+<div class="container">
+
+    <div>
+        <img src="assets/images/coupon-logo.jpg">
+    </div>
+
+    <div class="alert alert-info" *ngIf(message)>{{message}}</div>
+
+    <div>
+        <a [routerLink]="['/login', 'admin']"><button class="btn btn-dark">Administrator login</button></a>
+        <a [routerLink]="['/login', 'company']"><button class="btn btn-dark">Company login</button></a>
+        <a [routerLink]="['/login', 'customer']"><button class="btn btn-dark">Customer login</button></a>
+    </div>
+</div>
