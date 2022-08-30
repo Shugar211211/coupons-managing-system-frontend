@@ -16,6 +16,7 @@ export class CustomerDetailsComponent implements OnInit {
   customer: Customer
   loading = false
   update = false
+  resetPassword = false;
   submitting = false
   dSub: Subscription
 
@@ -49,6 +50,7 @@ export class CustomerDetailsComponent implements OnInit {
         if(this.customer != null) {
           this.loading=false
         }
+        this.customer.password = '**********'
       }, error => { this.alertService.danger(error.error.message) })
     })
   }
@@ -65,7 +67,9 @@ export class CustomerDetailsComponent implements OnInit {
       firstName: this.form.value.firstName,
       lastName: this.form.value.lastName,
       email: this.form.value.email,
-      password: this.form.value.password
+      // password: this.form.value.password
+      // if password field value was changed, then save it, else set password value as null
+      password: this.form.get('password').touched?this.form.value.password:null
     }
 
     this.customersService.update(updatedCustomer).subscribe( () => {

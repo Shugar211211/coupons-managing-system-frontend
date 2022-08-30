@@ -50,6 +50,7 @@ export class CompanyDetailsComponent implements OnInit {
         if(this.company != null) {
           this.loading=false
         }
+        this.company.password = '**********'
       }, error => { this.alertService.danger(error.error.message) }
       )
     })
@@ -67,7 +68,9 @@ export class CompanyDetailsComponent implements OnInit {
       id: this.company.id,
       name: this.company.name,
       email: this.form.value.email,
-      password: this.form.value.password
+      // password: this.form.value.password
+      // if password field value was changed, then save it, else set password value as null
+      password: this.form.get('password').touched?this.form.value.password:null
     }
     this.companiesService.update(updatedCompany).subscribe( () => {
       this.update = false
